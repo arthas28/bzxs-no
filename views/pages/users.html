@@ -1,0 +1,21 @@
+
+<%- contentFor('header') %>
+
+	<link rel="stylesheet" type="text/css" href="pages/users/users.css">
+
+<%- contentFor('content') %>
+
+	<div id="usersView">
+		<h3>Welcome to Users!</h3>
+		<p>{{myTime}}</p>
+		<assets></assets>
+		<router-link to="/home">load to home!</router-link>
+        <router-link to="/test">load to test!</router-link>
+        <router-view></router-view>
+	</div>
+
+<%- contentFor('footer') %>
+
+	<script type="text/javascript" src="pages/users.js"></script>
+
+
