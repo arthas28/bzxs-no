@@ -1,14 +1,22 @@
+// 动态路由文件
+
 var express = require('express');
 var router = express.Router();
+var glob = require('glob');	
 
-/* GET users listing. */
-router.get('/users', function(req, res, next) {
-  // res.send('respond with a resource');
-  res.render('pages/users');
+var srcDirName = './public/src/*.js'; //入口文件夹路径
+
+glob.sync(srcDirName).forEach(function (name) {
+    //n 获取文件名字
+    var url = '/' + name.slice(name.lastIndexOf('/'), name.length - 3).split("/")[1];
+
+    router.get(url, function(req, res, next) {
+	  res.render('pages' + url);
+	});
 });
 
 router.get('/hello', function(req, res, next) {
-  res.send('respond with a hello!');
+  res.send('  hello ! welcom to the world !');
 });
 
 module.exports = router;

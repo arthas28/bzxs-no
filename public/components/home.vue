@@ -1,6 +1,7 @@
 <template>
   <div id="indexHomeWrap">
     {{msg}}
+    <!-- <img src="/images/logo.png"> -->
   </div>
   <!-- <test-com></test-com> -->
 </template>

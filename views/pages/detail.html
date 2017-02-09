@@ -1,0 +1,14 @@
+
+<%- contentFor('content') %>
+
+	<div id="detailView">
+		<h3>Welcome to details!</h3>
+		<p>{{myTime}}</p>
+		<router-link to="/home">load to home!</router-link>
+        <router-link to="/test">load to test!</router-link>
+        <router-view></router-view>
+	</div>
+
+<%- contentFor('footer') %>
+
+	<script type="text/javascript" src="pages/detail.js"></script>

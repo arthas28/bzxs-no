@@ -2,7 +2,6 @@
 //import Vue from "vue"; //会去node_modules\vue\package.json
 import Test from '../components/test.vue';
 import Home from '../components/home.vue';
-import Assets from '../components/assets.vue';
 // import VueRouter from 'vue-router';
 
 // Vue.use(VueRouter);
@@ -19,10 +18,7 @@ var router = new VueRouter({
 });
 
 var $usersVm = new Vue({
-    el: '#usersView',
-    data: { myTime: '2017-01-06' },
-    router: router,
-    components: {
-    	Assets
-    }
+    el: '#detailView',
+    data: { myTime: '2018-08-08' },
+    router: router
 });

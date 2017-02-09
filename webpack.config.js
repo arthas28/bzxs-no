@@ -1,12 +1,18 @@
 var webpack=require("webpack");
+var glob = require('glob');
+
+var srcDirName = './public/src/*.js'; //入口文件夹路径
+var entryNames = {};
+
+glob.sync(srcDirName).forEach(function (name) {
+    //n 获取文件名字
+    var n = name.slice(name.lastIndexOf('/'), name.length - 3).split("/")[1];
+    entryNames[n] = name;
+});
 
 module.exports =
 {
-    entry:
-    {
-        //入口文件
-        "users":__dirname+'/public/src/users.js'
-    },
+    entry: entryNames,  //动态打包入口
     output: {
         path: __dirname+'/public/pages',  //输出文件夹
         //publicPath: '/build/',
@@ -15,7 +21,8 @@ module.exports =
     resolve: {
         alias: {
             vue: 'vue/dist/vue.js'
-        }
+        },
+        extensions: ['.vue', '.js', '.jsx', '.json']
     },
     // 此处的意义是找到node_modules/vue/dist/vue.js
     externals: {
