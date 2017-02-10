@@ -5,10 +5,16 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var expressLayouts = require('express-ejs-layouts')
+var expressLayouts = require('express-ejs-layouts');
+var timeout = require('connect-timeout');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
+var compression = require('compression');
 
+// 路由和配置模块
 var index = require('./routes/index');
 var pages = require('./routes/pages');
+var config = require('./config');
 
 var app = express();
 
@@ -27,8 +33,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(timeout('60s'));
+app.use(compression());
+
+// 配置路由
 app.use('/', index);
 app.use('/', pages);
+
+// ?????
+app.use(session({
+    secret: config.session_secret,
+    name: 'sessionID_bzsx',
+    store: new RedisStore({
+        port: config.redis_port,
+        host: config.redis_host,
+        db: 1,
+        pass: config.redis_password,
+        ttl: 60 * 60 * 24 * 7
+    }),
+    cookie: {
+        maxAge: 60 * 60 * 24 * 7 * 1000
+    },
+    resave: false,
+    saveUninitialized: false,
+}));
 
 //项目根目录
 global.ROOT_PATH = process.cwd();

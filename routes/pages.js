@@ -11,12 +11,18 @@ glob.sync(srcDirName).forEach(function (name) {
     var url = '/' + name.slice(name.lastIndexOf('/'), name.length - 3).split("/")[1];
 
     router.get(url, function(req, res, next) {
-	  res.render('pages' + url);
+    	
+    	// if(req.session.lastPage) {
+    	// 	console.log(req.session.lastPage);
+    	// }
+
+    	// req.session.lastPage = url;
+	  	res.render('pages' + url);
 	});
 });
 
 router.get('/hello', function(req, res, next) {
-  res.send('  hello ! welcom to the world !');
+  	res.send('  hello ! welcom to the world !');
 });
 
 module.exports = router;
