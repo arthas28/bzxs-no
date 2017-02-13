@@ -16,7 +16,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="less" scoped>
 #test_com {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   text-align: center;

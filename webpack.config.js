@@ -1,5 +1,6 @@
 var webpack=require("webpack");
 var glob = require('glob');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var srcDirName = './public/src/*.js'; //入口文件夹路径
 var entryNames = {};
@@ -7,7 +8,7 @@ var entryNames = {};
 glob.sync(srcDirName).forEach(function (name) {
     //n 获取文件名字
     var n = name.slice(name.lastIndexOf('/'), name.length - 3).split("/")[1];
-    entryNames[n] = name;
+    entryNames[n + '/' + n] = name;
 });
 
 module.exports =
@@ -33,15 +34,21 @@ module.exports =
     },
     module:{
         loaders:[
-            {test: /\.css$/, loader: 'style!css'},
-            {test: /\.less$/, loader: 'style!css!less'},
+            {test: /\.css$/, loader: 'style-loader!css-loader'},
             {test:/\.js$/, loader:"babel-loader", query:{compact:true}},
+            {
+                test: /\.less$/, 
+                loader: ExtractTextPlugin.extract({
+                    fallbackLoader: 'style-loader', 
+                    loader: 'css-loader!less-loader'
+                })
+            },
             {
                 test:/\.vue$/, 
                 loader:"vue-loader",
                 options: {
                     loaders: {
-                        'less': 'style!css!less'
+                        'less': 'style-loader!css-loader!less-loader'
                     }
                 }
             },
@@ -54,5 +61,8 @@ module.exports =
               }
             //这里肯定要加入n个loader 譬如vue-loader、babel-loader、css-loader等等
         ]
-    }
+    },
+    plugins: [
+        new ExtractTextPlugin('[name].css')
+    ]
 }
