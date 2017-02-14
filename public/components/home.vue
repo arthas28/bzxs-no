@@ -20,7 +20,7 @@ export default {
 }
 </script>
 
-<style type="less" scoped>
+<style lang="less" scoped>
 #indexHomeWrap {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   text-align: center;

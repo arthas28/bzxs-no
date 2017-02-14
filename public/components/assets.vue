@@ -16,7 +16,7 @@ export default {
 }
 </script>
 
-<style type="less" scoped>
+<style lang="less" scoped>
 #assets_com {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   text-align: center;
