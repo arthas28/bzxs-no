@@ -1,5 +1,5 @@
 
-require('./index/index.less');
+require('./index.less');
 
 console.log('init!');
 

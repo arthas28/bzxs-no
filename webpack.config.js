@@ -2,7 +2,7 @@ var webpack=require("webpack");
 var glob = require('glob');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var srcDirName = './public/src/*.js'; //入口文件夹路径
+var srcDirName = './public/src/**/*.js'; //入口文件夹路径
 var entryNames = {};
 
 glob.sync(srcDirName).forEach(function (name) {

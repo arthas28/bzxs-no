@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 var glob = require('glob');	
 
-var srcDirName = './public/src/*.js'; //入口文件夹路径
+var srcDirName = './public/src/**/*.js'; //入口文件夹路径
 
 glob.sync(srcDirName).forEach(function (name) {
     //n 获取文件名字
@@ -17,7 +17,7 @@ glob.sync(srcDirName).forEach(function (name) {
     	// }
 
     	// req.session.lastPage = url;
-	  	res.render('pages' + url);
+	  	res.render('pages' + url);      //渲染至view模板
 	});
 });
 
