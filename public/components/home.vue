@@ -2,6 +2,7 @@
   <div id="indexHomeWrap">
     {{msg}}
     <!-- <img src="/images/logo.png"> -->
+    <div class="homeInnerWrap">I am the childWrap!</div>
   </div>
   <!-- <test-com></test-com> -->
 </template>
@@ -25,5 +26,9 @@ export default {
   text-align: center;
   color: black;
   margin-top: 60px;
+
+  .homeInnerWrap {
+    color: orange;
+  }
 }
 </style>

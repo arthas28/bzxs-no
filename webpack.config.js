@@ -58,7 +58,7 @@ module.exports =
                 options: {
                   name: '[name].[ext]?[hash]'
                 }
-              }
+            }
             //这里肯定要加入n个loader 譬如vue-loader、babel-loader、css-loader等等
         ]
     },
