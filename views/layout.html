@@ -5,14 +5,21 @@
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>bzxs</title>
-	<!-- <link rel="stylesheet" type="text/css" href="/stylesheets/style.css"> -->
+	<link rel="stylesheet" type="text/css" href="./pages/global/common.css">
 	<%-defineContent('header')%>
 </head>
 <body>
-	<%-defineContent('content')%>
-	
-	<script type="text/javascript" src="/javascripts/vue.js"></script>
-	<script type="text/javascript" src="/javascripts/vue-router.min.js"></script>
-	<%-defineContent('footer')%>
+	<div class="bodyWrap">
+		<div class="bodyHeader">
+			<header-vue></header-vue>
+		</div>
+
+		<%-defineContent('content')%>
+		
+		<script type="text/javascript" src="/javascripts/vue.js"></script>
+		<script type="text/javascript" src="/javascripts/vue-router.min.js"></script>
+		<script type="text/javascript" src="./pages/global/global.js"></script>
+		<%-defineContent('footer')%>
+	</div>
 </body>
 </html>

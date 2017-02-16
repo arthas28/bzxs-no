@@ -7,8 +7,11 @@ var entryNames = {};
 
 glob.sync(srcDirName).forEach(function (name) {
     //n 获取文件名字
+    var _arr = name.split("/");
+    var f = _arr[_arr.length-2];
     var n = name.slice(name.lastIndexOf('/'), name.length - 3).split("/")[1];
-    entryNames[n + '/' + n] = name;
+
+    entryNames[f + '/' + n] = name;
 });
 
 module.exports =
