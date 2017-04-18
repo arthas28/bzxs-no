@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>QQ</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <style type="text/css">
+            .qq_wrap {
+                margin: 0 auto;
+            }
+        </style>
+        <div class="qq_wrap">
+            <iframe id="iframe_id" style="width: 500px;height: 800px;" src="http://w.qq.com/"></iframe>
+        </div>
+
+        <script type="text/javascript" src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                setTimeout(function() {
+                    $('#iframe_id').contents().find('#panelBody-5').css('background', '#fff');
+                }, 3000);
+            });
+        </script>
+    </body>
+</html>
