@@ -22,7 +22,11 @@ glob.sync(srcDirName).forEach(function (name) {
 });
 
 router.get('/hello', function(req, res, next) {
-  	res.send('  hello ! welcom to the world !');
+  	res.send('  hello ! welcom to the world2 !');
+});
+
+router.get('/qq', function(req, res, next) {
+  res.render('pages/qq', {'layout': false});
 });
 
 module.exports = router;
