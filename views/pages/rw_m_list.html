@@ -1,0 +1,109 @@
+<%- contentFor('header')%>
+<script type="text/javascript" src="//at.alicdn.com/t/font_xsg2vmsdsrzr529.js"></script>
+<link rel="stylesheet" type="text/css" href="<%=PUBLIC_CDN%>/rw_dist/css/goods-6517f935e3.css">
+<%- contentFor('body')%>
+<div class="mrw-container">
+	<div class="m-goodsl j-mgds-goodsl">
+		<ul class="c-breadcrumb">
+			<li>
+				<a rel="nofollow" href="/"><%=language[lang].goods_lang.lang_goods_home%></a>
+			</li>
+			<% if(cat_info.type == 'entity') { %>
+				<% if(Object.keys(parentCat).length) { %>
+					<li><a href="<%=parentCat.cat_url_name+'-c-'+parentCat.cat_id+'.html'%>"><%=parentCat.cat_name%></a></li>
+				<% } %>
+				<% if(Object.keys(currentCat).length) { %>
+					<li><a href="<%=currentCat.cat_url_name+'-c-'+currentCat.cat_id+'.html'%>"><%=currentCat.cat_name%></a></li>
+				<% } %>
+			<% } else if(cat_info.model == 'getProductsByDailyNew') { %>
+				<li><%=language[lang].daily_new_lang.lang_daily_new_daily_new%></li>
+			<% } else if(cat_info.daily) { %>
+				<li><%=language[lang].daily_new_lang.lang_daily_new_daily_new%></li>
+				<li><%=cat_info.daily%></li>
+			<% } else if(cat_info.type == 'new_in') {%>
+				<li>New In <%=cat_info.cat_name%></li>
+			<% } else if(cat_info.type == 'virtual') {%>
+				<li><%=currentCat.virtual_category_name%></li>
+			<% } else if(cat_info.type == 'search') {%>
+				<li><%=cat_info.keywords%></li>
+			<% } %>
+			<li><%=sum%> <%=language[lang].list_lang.lang_list_results%></li>
+		</ul>
+		<div class="goodsl-wrap" >
+		<% goods && goods.forEach((item, index) => {%>
+			<div class="goodsl-item-wrap">
+				<div class="c-goodsli">
+					<a class="goodsli-img" href="<%=getGoodsUrl(item.goods_url_name, item.goods_id, item.cat_id) %>">
+						<img src="<%=transformImg(item.goods_img) %>" />
+					</a>
+					<div class="goodsli-bottom">
+						<div class="goodsli-bottom-price">
+							<span class="goodsli-price-discount"><%=item.salePrice.amountWithSymbol%></span>
+							<% if(item.unit_discount>0){ %>
+								<span class="goodsli-price-original">
+									<%=item.retailPrice.amountWithSymbol%>
+								</span>
+							<% } %>
+						</div>
+						<div class="goodsli-bottom-icon">
+							<svg class="iconsymbol" aria-hidden="true">
+				                <use xlink:href="#icon-color1"></use>
+				            </svg>
+							<i class="iconfont icon-save"></i>
+							<i class="iconfont icon-saved"></i>
+						</div>
+					</div>
+					<% if(item.unit_discount>0){ %>
+						<div class="goodsli-discount <% if(lang == 'de'){ %> disc-one-line <% } %>" > 
+						<!-- 非new商品去掉类.disc-new即可 -->
+							<div>
+								<% if(lang == 'de'){ %> - <% } %>
+	                            <%=item.unit_discount%>%
+                            </div>
+                            <%=language[lang].goods_lang.lang_goods_off%>
+						</div>
+					<% } %>
+				</div>
+			</div>
+		<% }) %>
+
+			<itemtpl-vue></itemtpl-vue>
+
+			<div class="loader-data" v-show="status.loading" s>
+	          	<div class="la-line-scale la-red1">
+	              	<div></div><div></div><div></div><div></div><div></div>
+	          	</div>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+<%- contentFor('footer')%>
+
+<script src="<%=PUBLIC_CDN%>/rw_dist/libs/vue/vue-infinite-scroll.js"></script>
+<%- include('../components/product/vue_item.html')%>
+
+<script type="text/javascript">
+	var goodsTest = <%- JSON.stringify(goods) %>;
+	console.log(goodsTest);
+
+	var vueListPage = new Vue({
+		el: '.j-mgds-goodsl',
+
+		data: {
+			status: {
+				loading: false
+			}
+		},
+
+        mounted: function() {
+			console.log('vue init finished!');
+        },
+
+        methods: {
+        	loadMore: function() {
+        		console.count('start!');
+        	}
+        }
+    });
+</script>

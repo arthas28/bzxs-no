@@ -1,0 +1,60 @@
+<script type="text/x-template" id="item-template">
+    <div class="goodsl-item-wrap">
+        <div class="c-goodsli">
+            <a class="goodsli-img" :href="'getGoodsUrl(' + item.goods_url_name + ', ' + item.goods_id + ', ' + item.cat_id + ')'">
+                <img :src="'transformImg(' + item.goods_img + ')'" />
+            </a>
+            <div class="goodsli-bottom">
+                <div class="goodsli-bottom-price">
+                    <span class="goodsli-price-discount">{{item.salePrice.amountWithSymbol}}</span>
+                    <span class="goodsli-price-original" v-if="item.unit_discount>0">
+                        {{item.retailPrice.amountWithSymbol}}
+                    </span>
+                </div>
+                <div class="goodsli-bottom-icon">
+                    <svg class="iconsymbol" aria-hidden="true">
+                        <use xlink:href="#icon-color1"></use>
+                    </svg>
+                    <i class="iconfont icon-save"></i>
+                    <i class="iconfont icon-saved"></i>
+                </div>
+            </div>
+            <div class="goodsli-discount <% if(lang == 'de'){ %> disc-one-line <% } %>" v-if="item.unit_discount>0"> 
+            <!-- 非new商品去掉类.disc-new即可 -->
+                <div>
+                    <% if(lang == 'de'){ %> - <% } %>
+                    {{item.unit_discount}}%
+                </div>
+                OFF
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript" data-id="itemtpl-vue">
+
+    var global_wishloading = 0;     //addtowish one click
+    Vue.component('itemtpl-vue', {
+        template: '#item-template',
+
+        props: {
+            item: Object
+        },
+
+        data: function() {
+            return {
+                status: {
+                    wishloading: 0
+                }
+            }
+        },
+
+        mounted: function() {
+        	// console.log(this.itemdata);
+        },
+
+        methods: {
+
+        }
+    });
+</script>

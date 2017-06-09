@@ -17,14 +17,55 @@
 
         <script type="text/javascript" src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
         <script type="text/javascript">
-            setTimeout(function() {
+            // setTimeout(function() {
             //     $(document).ready(function() {
                     // debugger;
                     // $('#panelBody-5', window.frames['iframe_id'].document).css('background-color', '#fff');
-                    $(window.frames['iframe_id'].document).find('#panelBody-5').css('background', '#fff');
+                    // $(window.frames['iframe_id'].document).find('#panelBody-5').css('background', '#fff');
                     // $('#iframe_id').contents().find('#panelBody-5').css('background', '#fff');
             //     });
-            }, 3000);
+            // }, 3000);
+
+            jQuery.cookie = function(name, value, options) {
+                if (typeof value != 'undefined') {
+                    options = options || {};
+                    if (value === null) {
+                        value = '';
+                        options.expires = -1;
+                    }
+                    var expires = '';
+                    if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+                        var date;
+                        if (typeof options.expires == 'number') {
+                            date = new Date();
+                            date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
+                        } else {
+                            date = options.expires;
+                        }
+                        expires = '; expires=' + date.toUTCString();
+                    }
+                    var path = options.path ? '; path=' + (options.path) : '';
+                    var domain = options.domain ? '; domain=' + (options.domain) : '';
+                    var secure = options.secure ? '; secure' : '';
+                    document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+                } else {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie != '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+            }
+            debugger
+            $.cookie('testok', '12345')
+            console.log($.cookie('testok'));
         </script>
     </body>
 </html>
