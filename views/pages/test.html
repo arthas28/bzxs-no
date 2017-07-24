@@ -8,6 +8,7 @@
 		.recommend-size-wrap .range-input[type="range"] {
 			position: relative;
 			-webkit-appearance: none; 
+			outline: none;
 			width: 200px;
 			z-index: 999;
 			border: 0;
@@ -23,10 +24,10 @@
 			cursor: pointer;
 		}
 		.recommend-size-wrap .range-input[type="range"]::-moz-range-thumb {
-			-webkit-appearance: none;
+			-moz-appearance: none;
 			height: 46px;
 			width: 20px;
-			border: 1px solid #666;
+			border: 0;
 			margin-top: -20px;
 			background: transparent;
 			background-size: contain;
@@ -43,7 +44,12 @@
 			background: #666;
 		}
 		.recommend-size-wrap .range-input[type="range"]:focus {
-			outline: none;
+			outline: 1px solid transparent;
+		}
+		.recommend-size-wrap .range-input[type="range"]:-moz-focusring,
+		.recommend-size-wrap .range-input[type="range"]::-moz-focus-inner {
+		    border: 0;
+		    outline : 1px solid transparent;
 		}
 
 		.recommend-size-wrap {
