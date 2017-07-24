@@ -232,8 +232,8 @@
         			<div class="range-item">
         				<label class="range-prev">Weight:</label>
         				<div class="range-body">
-        					<input type="range" min="25" max="150" step="1" value="60" class="range-input j-range j-range-w"/>
-        					<div class="rang-point j-point">60</div>
+        					<!-- <input type="range" min="25" max="150" step="1" value="60" class="range-input j-range j-range-w"/> -->
+        					<div class="rang-point j-point j-point-w">60</div>
         				</div>
         				<label class="range-lab j-point">60</label>
         			</div>
@@ -265,21 +265,36 @@
 			$('.recommend-size-wrap').show();
 		})
 
-		$('.j-range').on('input change', function() {
-			var $point = $(this).parents('.range-item').find('.j-point');
-			$point.css('left', Math.round((this.value-this.min)/(this.max-this.min)*200) + 'px');
-			if($point.data('type') == 'prefer') {
-				if(this.value == 0) {
-					$point.text('Tighter');
-				} else if(this.value == 1) {
-					$point.text('Suitable');
-				} else if(this.value == 2) {
-					$point.text('Looser');
-				}
-			} else {
-				$point.text(this.value);
-			}
-		})
+		$(".j-point-w").on({
+		    mousedown: function(e){
+                var el=$(this);
+                var os = el.offset(); dx = e.pageX-os.left; sx = e.pageX;
+                $(document).on('mousemove.drag', function(e){ 
+                	console.log(e.pageX-sx)
+                	el.offset({left: e.pageX-dx});
+                });
+            }
+   		});
+
+   		$(document).on('mouseup', function() {
+   			$(document).off('mousemove.drag');
+   		})
+
+		// $('.j-range').on('input change', function() {
+		// 	var $point = $(this).parents('.range-item').find('.j-point');
+		// 	$point.css('left', Math.round((this.value-this.min)/(this.max-this.min)*200) + 'px');
+		// 	if($point.data('type') == 'prefer') {
+		// 		if(this.value == 0) {
+		// 			$point.text('Tighter');
+		// 		} else if(this.value == 1) {
+		// 			$point.text('Suitable');
+		// 		} else if(this.value == 2) {
+		// 			$point.text('Looser');
+		// 		}
+		// 	} else {
+		// 		$point.text(this.value);
+		// 	}
+		// })
 
 		$('.j-range-w').siblings('.rang-point').css('left', '56px');
 
