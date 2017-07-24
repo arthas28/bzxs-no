@@ -78,10 +78,27 @@
 	</div>
 </div>
 
+               <a href="javascript:;" class="swiper-slide" data-index="1" data-cat-name="Dresses">Dresses</a>
+                <a href="javascript:;" class="swiper-slide" data-index="2" data-cat-name="T-shirts">T-shirts</a>
+                <a href="javascript:;" class="swiper-slide" data-index="3" data-cat-name="Blouses">Blouses</a>
+                <a href="javascript:;" class="swiper-slide" data-index="4" data-cat-name="Leggings">Leggings</a>
+                <a href="javascript:;" class="swiper-slide" data-index="5" data-cat-name="Jackets">Jackets</a>
+                <a href="javascript:;" class="swiper-slide" data-index="6" data-cat-name="Coat">Coat</a>
+                <a href="javascript:;" class="swiper-slide" data-index="7" data-cat-name="Activewear">Activewear</a>
+                <a href="javascript:;" class="swiper-slide" data-index="8" data-cat-name="Sheer">Sheer</a>
+                <a href="javascript:;" class="swiper-slide" data-index="9" data-cat-name="Accessories">Accessories</a>
+
 <%- contentFor('footer')%>
 
 <script src="<%=PUBLIC_CDN%>/rw_dist/libs/vue/vue-infinite-scroll.js"></script>
 <%- include('../components/product/vue_item.html')%>
+
+.icon-saved-v {
+            position: relative;
+            right: 0;
+            top: 0;
+            display: inline-block!important;
+        }
 
 <script type="text/javascript">
 	var goodsTest = <%- JSON.stringify(goods) %>;
