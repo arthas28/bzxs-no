@@ -4,11 +4,247 @@
 	<link rel="stylesheet" type="text/css" href="pages/test/test.css">
 
 <%- contentFor('content') %>
+	<style type="text/css">
+		.recommend-size-wrap .range-input[type="range"] {
+			position: relative;
+			-webkit-appearance: none; 
+			width: 200px;
+			z-index: 999;
+			border: 0;
+		}
+		.recommend-size-wrap .range-input[type="range"]::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			height: 46px;
+			width: 20px;
+			border: 0;
+			margin-top: -20px;
+			background: transparent;
+			background-size: contain;
+			cursor: pointer;
+		}
+		.recommend-size-wrap .range-input[type="range"]::-moz-range-thumb {
+			-webkit-appearance: none;
+			height: 46px;
+			width: 20px;
+			border: 1px solid #666;
+			margin-top: -20px;
+			background: transparent;
+			background-size: contain;
+			cursor: pointer;
+		}
+		.recommend-size-wrap .range-input[type="range"]::-webkit-slider-runnable-track {
+			height: 3px;
+			border-radius: 3px;;
+			background: #666;
+		}
+		.recommend-size-wrap .range-input[type="range"]::-moz-range-track {
+			height: 3px;
+			border-radius: 3px;;
+			background: #666;
+		}
+		.recommend-size-wrap .range-input[type="range"]:focus {
+			outline: none;
+		}
 
-	<div id="testView">
+		.recommend-size-wrap {
+			/*display: none;*/
+			position: absolute;
+			width: 900px;
+			height: 540px;
+			top: 20px;
+			left: 50%;
+			padding: 44px 44px 0 30px;
+    		margin-left: -450px;
+			border: 1px solid grey;
+			box-sizing: border-box;
+		}
+		.recommend-size-wrap .close-btn {
+			position: absolute;
+		    top: 0;
+		    right: 0;
+		    font-size: 30px;
+		    width: 44px;
+		    height: 44px;
+		    text-align: center;
+		    cursor: pointer;
+		}
+		.recommend-size-wrap .size-img {
+			width: 320px;
+			height: 426px;
+		}
+		.recommend-size-wrap .size-wrap-right {
+			width: 476px;
+			padding: 0 13px;
+			text-align: center;
+			float: right;
+		}
+		.recommend-size-wrap .size-wrap-right .size-wrap-title {
+			color: #222;
+			font-size: 18px;
+			font-weight: 700;
+			text-transform: uppercase;
+		}
+		.recommend-size-wrap .size-wrap-right .size-wrap-tips {
+			color: #666;
+			font-size: 12px;
+		}
+		.recommend-size-wrap .size-wrap-right .size-switch {
+			width: 60px;
+			height: 28px;
+			font-size: 12px;
+			border: 1px solid #ccc;
+			border-radius: 14px;
+			margin: 22px auto 40px auto;
+			box-sizing: border-box;
+			cursor: pointer;
+			position: relative;
+		}
+		.recommend-size-wrap .size-wrap-right .size-switch div {
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+			border: 1px solid #fff;
+			background-color: #000;
+			left: 0;
+		}
+		.recommend-size-wrap .size-wrap-right .size-switch:before {
+			content: 'CM';
+			top: 6px;
+			left: -38px;
+			position: absolute;
+		}
+		.recommend-size-wrap .size-wrap-right .size-switch:after {
+			content: 'IN';
+			top: 6px;
+			right: -30px;
+			position: absolute;
+		}
+		.recommend-size-wrap .size-range-wrap .range-item {
+			margin-bottom: 60px;
+			font-size: 12px;
+		}
+		.recommend-size-wrap .size-range-wrap .range-lab {
+			width: 30px;
+			display: inline-block;
+			vertical-align: top;
+		}
+		.recommend-size-wrap .size-range-wrap .range-prev {
+			width: 110px;
+			display: inline-block;
+			vertical-align: top;
+			text-align: right;
+		}
+		.recommend-size-wrap .size-range-wrap .range-body {
+			display: inline-block;
+			width: 230px;
+			margin: 0 30px;
+			position: relative;
+		}
+		.recommend-size-wrap .size-range-wrap .range-body:before {
+			content: '';
+		    display: block;
+		    width: 0;
+		    height: 0;
+		    position: absolute;
+		    left: -13px;
+		    top: 5px;
+		    border: 4px solid transparent;
+		    border-right: 6px solid #666;
+		}
+		.recommend-size-wrap .size-range-wrap .range-body:after {
+		    content: '';
+		    display: block;
+		    width: 0;
+		    height: 0;
+		    position: absolute;
+		    right: -13px;
+		    top: 5px;
+		    border: 4px solid transparent;
+		    border-left: 6px solid #666;
+		}
+		.recommend-size-wrap .size-range-wrap .rang-point {
+			position: absolute;
+			top: 20px;
+			left: 100px;
+			font-size: 12px;
+			width: 30px;
+			/*cursor: pointer;*/
+		}
+		.recommend-size-wrap .size-range-wrap .rang-point:before {
+			content: '';
+		    display: block;
+		    width: 0;
+		    height: 0;
+		    position: absolute;
+		    top: -25px;
+		    left: 50%;
+    		margin-left: -4px;
+		    border: 4px solid transparent;
+		    border-top: 6px solid #666;
+		}
+		.recommend-size-wrap .size-submit {
+			width: 200px;
+			height: 44px;
+			border: 1px solid #000;
+			line-height: 44px;
+			text-transform: uppercase;
+			font-size: 16px;
+			font-weight: 700;
+			color: #000;
+			text-align: center;
+			margin-left: 177px;
+			cursor: pointer;
+		}
+		
+	</style>
+
+	<div id="testView" style="position: relative;">
 		<h3>Welcome to test!</h3>
 
-        <h2>Touch</h2>
+        <h2 style="cursor: pointer;">Touch</h2>
+
+        
+
+        <div class="recommend-size-wrap">
+        	<div class="close-btn">x</div>
+        	<img src="" alt="hahathis!" class="size-img">
+        	<div class="size-wrap-right">
+        		<div class="size-wrap-title">Get the right size</div>
+        		<p class="size-wrap-tips"> See which size people like you bought and did not return:</p>
+        		<div class="size-switch">
+        			<div></div>
+        		</div>
+        		<div class="size-range-wrap">
+        			<div class="range-item">
+        				<label class="range-prev">Height:</label>
+        				<div class="range-body">
+        					<input type="range" min="140" max="198" step="1" value="170" class="range-input j-range"/>
+        					<div class="rang-point j-point">170</div>
+        				</div>
+        				<label class="range-lab j-point">170</label>
+        			</div>
+        			<div class="range-item">
+        				<label class="range-prev">Weight:</label>
+        				<div class="range-body">
+        					<input type="range" min="25" max="150" step="1" value="60" class="range-input j-range j-range-w"/>
+        					<div class="rang-point j-point">60</div>
+        				</div>
+        				<label class="range-lab j-point">60</label>
+        			</div>
+        			<div class="range-item">
+        				<label class="range-prev">I prefer a fit that is:</label>
+        				<div class="range-body">
+        					<input type="range" min="0" max="2" step="1" value="1" class="range-input j-range"/>
+        					<div class="rang-point j-point" data-type="prefer">Suitable</div>
+        				</div>
+        				<label class="range-lab j-point" data-type="prefer">Suitable</label>
+        			</div>
+        		</div>
+        		<div class="size-submit">
+        			Find my size
+        		</div>
+        	</div>
+        </div>
 
         <div class="endWrap">end!</div>
 	</div>
@@ -17,6 +253,49 @@
 
 	<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 	<script type="text/javascript" src="pages/test/test.js"></script>
+
+	<script type="text/javascript" data-id="recommendedSize">
+		$('#testView h2').click(function() {
+			$('.recommend-size-wrap').show();
+		})
+
+		$('.j-range').on('input change', function() {
+			var $point = $(this).parents('.range-item').find('.j-point');
+			$point.css('left', Math.round((this.value-this.min)/(this.max-this.min)*200) + 'px');
+			if($point.data('type') == 'prefer') {
+				if(this.value == 0) {
+					$point.text('Tighter');
+				} else if(this.value == 1) {
+					$point.text('Suitable');
+				} else if(this.value == 2) {
+					$point.text('Looser');
+				}
+			} else {
+				$point.text(this.value);
+			}
+		})
+
+		$('.j-range-w').siblings('.rang-point').css('left', '56px');
+
+		// var romSize = new Vue({
+		// 	el: '.recommend-size-wrap',
+		// 	data: {
+		// 		rangeData: {
+		// 			height: 0
+		// 		}
+		// 	},
+		// 	created: function() {
+		// 		console.log('vue!')
+
+		// 	},
+		// 	methods: {
+		// 		rangeChange: function() {
+		// 			console.count('111')
+		// 		}
+		// 	}
+		// });
+
+	</script>
 
 	<script type="text/javascript">
 		console.log('test come!');
