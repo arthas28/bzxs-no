@@ -16,6 +16,7 @@
     		margin-left: -450px;
 			border: 1px solid grey;
 			box-sizing: border-box;
+			user-select: none;
 		}
 		.recommend-size-wrap .close-btn {
 			position: absolute;
@@ -225,57 +226,6 @@
 		$('#testView h2').click(function() {
 			$('.recommend-size-wrap').show();
 		})
-
-		// $(".j-weight, .j-height").on({
-		//     mousedown: function(e){
-		//     	var el=$(this);
-		//     	var ox = el.siblings('.range-contain').offset().left;
-  //               var os = el.offset(); dx = e.pageX-os.left; sx = e.pageX;
-  //               $(document).on('mousemove.drag', function(e){ 
-  //               	console.log(el.offset().left-ox)
-  //               	var _length = el.offset().left-ox;
-  //               	if(_length > -18 && _length <=188) {
-  //               		// console.count(_length)
-  //               		el.offset({left: e.pageX-dx});
-  //               	}
-  //               });
-  //           }
-  //  		});
-
-  //  		$(document).on('mouseup', function() {
-  //  			$(document).off('mousemove.drag');
-  //  			var ox = $(".j-weight").siblings('.range-contain').offset().left;
-   			
-  //  			var _length_h = $(".j-height").offset().left-ox;
-  //  			if(_length_h <= -15) {
-  //  				$(".j-height").css('left', 0);
-  //  			} else if(_length_h > 185) {
-  //  				$(".j-height").css('left', 200);
-  //  			}
-
-  //  			var _length_w = $(".j-weight").offset().left-ox;
-  //  			if(_length_w <= -15) {
-  //  				$(".j-weight").css('left', 0);
-  //  			} else if(_length_w > 185) {
-  //  				$(".j-weight").css('left', 200);
-  //  			}
-  //  		})
-
-		// $('.j-range').on('input change', function() {
-		// 	var $point = $(this).parents('.range-item').find('.j-point');
-		// 	$point.css('left', Math.round((this.value-this.min)/(this.max-this.min)*200) + 'px');
-		// 	if($point.data('type') == 'prefer') {
-		// 		if(this.value == 0) {
-		// 			$point.text('Tighter');
-		// 		} else if(this.value == 1) {
-		// 			$point.text('Suitable');
-		// 		} else if(this.value == 2) {
-		// 			$point.text('Looser');
-		// 		}
-		// 	} else {
-		// 		$point.text(this.value);
-		// 	}
-		// })
 
 		$('.j-range-w').siblings('.rang-point').css('left', '56px');
 
