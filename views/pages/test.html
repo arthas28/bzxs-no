@@ -5,53 +5,6 @@
 
 <%- contentFor('content') %>
 	<style type="text/css">
-		.recommend-size-wrap .range-input[type="range"] {
-			position: relative;
-			-webkit-appearance: none; 
-			outline: none;
-			width: 200px;
-			z-index: 999;
-			border: 0;
-		}
-		.recommend-size-wrap .range-input[type="range"]::-webkit-slider-thumb {
-			-webkit-appearance: none;
-			height: 46px;
-			width: 20px;
-			border: 0;
-			margin-top: -20px;
-			background: transparent;
-			background-size: contain;
-			cursor: pointer;
-		}
-		.recommend-size-wrap .range-input[type="range"]::-moz-range-thumb {
-			-moz-appearance: none;
-			height: 46px;
-			width: 20px;
-			border: 0;
-			margin-top: -20px;
-			background: transparent;
-			background-size: contain;
-			cursor: pointer;
-		}
-		.recommend-size-wrap .range-input[type="range"]::-webkit-slider-runnable-track {
-			height: 3px;
-			border-radius: 3px;;
-			background: #666;
-		}
-		.recommend-size-wrap .range-input[type="range"]::-moz-range-track {
-			height: 3px;
-			border-radius: 3px;;
-			background: #666;
-		}
-		.recommend-size-wrap .range-input[type="range"]:focus {
-			outline: 1px solid transparent;
-		}
-		.recommend-size-wrap .range-input[type="range"]:-moz-focusring,
-		.recommend-size-wrap .range-input[type="range"]::-moz-focus-inner {
-		    border: 0;
-		    outline : 1px solid transparent;
-		}
-
 		.recommend-size-wrap {
 			/*display: none;*/
 			position: absolute;
@@ -142,7 +95,7 @@
 		}
 		.recommend-size-wrap .size-range-wrap .range-body {
 			display: inline-block;
-			width: 230px;
+			/*width: 230px;*/
 			margin: 0 30px;
 			position: relative;
 		}
@@ -153,7 +106,7 @@
 		    height: 0;
 		    position: absolute;
 		    left: -13px;
-		    top: 5px;
+		    top: -2px;
 		    border: 4px solid transparent;
 		    border-right: 6px solid #666;
 		}
@@ -164,17 +117,25 @@
 		    height: 0;
 		    position: absolute;
 		    right: -13px;
-		    top: 5px;
+		    top: -2px;
 		    border: 4px solid transparent;
 		    border-left: 6px solid #666;
 		}
 		.recommend-size-wrap .size-range-wrap .rang-point {
 			position: absolute;
-			top: 20px;
+			top: 12px;
 			left: 100px;
 			font-size: 12px;
 			width: 30px;
-			/*cursor: pointer;*/
+			cursor: pointer;
+		}
+		.recommend-size-wrap .size-range-wrap .range-contain {
+			position: relative;
+			height: 3px;
+			width: 200px;
+			margin: 0 15px;
+			/*z-index: 999;*/
+			background: #666;
 		}
 		.recommend-size-wrap .size-range-wrap .rang-point:before {
 			content: '';
@@ -211,7 +172,7 @@
 
         
 
-        <div class="recommend-size-wrap">
+        <div class="recommend-size-wrap" @mouseup="rangeUp">
         	<div class="close-btn">x</div>
         	<img src="" alt="hahathis!" class="size-img">
         	<div class="size-wrap-right">
@@ -224,26 +185,26 @@
         			<div class="range-item">
         				<label class="range-prev">Height:</label>
         				<div class="range-body">
-        					<input type="range" min="140" max="198" step="1" value="170" class="range-input j-range"/>
-        					<div class="rang-point j-point">170</div>
+        					<div class="range-contain j-body-h"></div>
+        					<div class="rang-point j-point j-height" @mousemove="rangeChange($event, 'height')" @mousedown="rangeDown($event, 'height')">{{rangeData.height.value}}</div>
         				</div>
-        				<label class="range-lab j-point">170</label>
+        				<label class="range-lab j-point">{{rangeData.height.value}}</label>
         			</div>
         			<div class="range-item">
         				<label class="range-prev">Weight:</label>
         				<div class="range-body">
-        					<!-- <input type="range" min="25" max="150" step="1" value="60" class="range-input j-range j-range-w"/> -->
-        					<div class="rang-point j-point j-point-w">60</div>
+        					<div class="range-contain j-body-w"></div>
+        					<div class="rang-point j-point j-weight" @mousemove="rangeChange($event, 'weight')" @mousedown="rangeDown($event, 'weight')">{{rangeData.weight.value}}</div>
         				</div>
-        				<label class="range-lab j-point">60</label>
+        				<label class="range-lab j-point">{{rangeData.weight.value}}</label>
         			</div>
         			<div class="range-item">
         				<label class="range-prev">I prefer a fit that is:</label>
         				<div class="range-body">
-        					<input type="range" min="0" max="2" step="1" value="1" class="range-input j-range"/>
-        					<div class="rang-point j-point" data-type="prefer">Suitable</div>
+        					<div class="range-contain j-body-p"></div>
+        					<div class="rang-point j-point j-prefer" @mousemove="rangeChange($event, 'prefer')" @mousedown="rangeDown($event, 'prefer')">{{rangeData.prefer.value}}</div>
         				</div>
-        				<label class="range-lab j-point" data-type="prefer">Suitable</label>
+        				<label class="range-lab j-point">{{rangeData.prefer.value}}</label>
         			</div>
         		</div>
         		<div class="size-submit">
@@ -265,20 +226,40 @@
 			$('.recommend-size-wrap').show();
 		})
 
-		$(".j-point-w").on({
-		    mousedown: function(e){
-                var el=$(this);
-                var os = el.offset(); dx = e.pageX-os.left; sx = e.pageX;
-                $(document).on('mousemove.drag', function(e){ 
-                	console.log(e.pageX-sx)
-                	el.offset({left: e.pageX-dx});
-                });
-            }
-   		});
+		// $(".j-weight, .j-height").on({
+		//     mousedown: function(e){
+		//     	var el=$(this);
+		//     	var ox = el.siblings('.range-contain').offset().left;
+  //               var os = el.offset(); dx = e.pageX-os.left; sx = e.pageX;
+  //               $(document).on('mousemove.drag', function(e){ 
+  //               	console.log(el.offset().left-ox)
+  //               	var _length = el.offset().left-ox;
+  //               	if(_length > -18 && _length <=188) {
+  //               		// console.count(_length)
+  //               		el.offset({left: e.pageX-dx});
+  //               	}
+  //               });
+  //           }
+  //  		});
 
-   		$(document).on('mouseup', function() {
-   			$(document).off('mousemove.drag');
-   		})
+  //  		$(document).on('mouseup', function() {
+  //  			$(document).off('mousemove.drag');
+  //  			var ox = $(".j-weight").siblings('.range-contain').offset().left;
+   			
+  //  			var _length_h = $(".j-height").offset().left-ox;
+  //  			if(_length_h <= -15) {
+  //  				$(".j-height").css('left', 0);
+  //  			} else if(_length_h > 185) {
+  //  				$(".j-height").css('left', 200);
+  //  			}
+
+  //  			var _length_w = $(".j-weight").offset().left-ox;
+  //  			if(_length_w <= -15) {
+  //  				$(".j-weight").css('left', 0);
+  //  			} else if(_length_w > 185) {
+  //  				$(".j-weight").css('left', 200);
+  //  			}
+  //  		})
 
 		// $('.j-range').on('input change', function() {
 		// 	var $point = $(this).parents('.range-item').find('.j-point');
@@ -298,23 +279,104 @@
 
 		$('.j-range-w').siblings('.rang-point').css('left', '56px');
 
-		// var romSize = new Vue({
-		// 	el: '.recommend-size-wrap',
-		// 	data: {
-		// 		rangeData: {
-		// 			height: 0
-		// 		}
-		// 	},
-		// 	created: function() {
-		// 		console.log('vue!')
+		var romSize = new Vue({
+			el: '.recommend-size-wrap',
+			data: {
+				rangeData: {
+					height: {
+						ox: $('.j-body-h').offset().left,
+						dx: 0,
+						status: 0,
+						value: 170,
+						left: 0,
+						range: 58,
+						min: 140,
+						max: 198
+					},
+					weight: {
+						ox: $('.j-body-w').offset().left,
+						dx: 0,
+						status: 0,
+						value: 60,
+						left: 0,
+						range: 125,
+						min: 25,
+						max: 150
+					},
+					prefer: {
+						ox: $('.j-body-p').offset().left,
+						dx: 0,
+						status: 0,
+						value: 'Suitable',
+						left: 0,
+						range: 2,
+						min: 0,
+						max: 2
+					},
+				},
+				currentType: null
+			},
+			created: function() {
+				console.log('vue!')
 
-		// 	},
-		// 	methods: {
-		// 		rangeChange: function() {
-		// 			console.count('111')
-		// 		}
-		// 	}
-		// });
+			},
+			methods: {
+				rangeChange: function(el, type) {
+					if(this.rangeData[type].status) {
+						var _el = $(el.target);
+	                	var _length = _el.offset().left-this.rangeData[type].ox;
+	                	this.rangeData[type].left = _length*1 + 15;
+	                	if(_length > -18 && _length <=188) {
+	                		_el.offset({left: el.pageX-this.rangeData[type].dx});
+	                		// console.log(_el.css('left'))
+	                		this.valueSwitch(type, parseInt(_el.css('left')));
+	                	}
+	                }
+				},
+				rangeDown: function(el, type) {
+					var _el = $(el.target);
+					this.rangeData[type].dx = el.pageX-_el.offset().left;
+					this.rangeData[type].status = 1;
+					this.currentType = type;
+					// console.log(this.rangeData[type].dx)
+				},
+				rangeUp: function() {
+					this.rangeData.height.status = 0;
+					this.rangeData.weight.status = 0;
+					this.rangeData.prefer.status = 0;
+
+					if(this.currentType == 'prefer') {
+						if(this.rangeData.prefer.value == 'Tighter') {
+							$(".j-prefer").css('left', 0);
+						} else if(this.rangeData.prefer.value == 'Looser') {
+							$(".j-prefer").css('left', 200);
+						} else {
+							$(".j-prefer").css('left', 100);
+						}
+					} else if(this.currentType) {
+						if(this.rangeData[this.currentType].left < 0) {
+							$(".j-" + this.currentType).css('left', 0);
+						} else if(this.rangeData[this.currentType].left > 200) {
+							$(".j-" + this.currentType).css('left', 200);
+						}
+					}
+				},
+				valueSwitch: function(type, value) {
+					if(type == 'prefer') {
+						if(value < 67) {
+							this.rangeData[type].value = 'Tighter';
+						} else if(value > 135) {
+							this.rangeData[type].value = 'Looser';
+						} else {
+							this.rangeData[type].value = 'Suitable';
+						}
+					} else {
+						Math.round((this.value-this.min)/(this.max-this.min)*200)
+						this.rangeData[type].value = Math.round(value/200*this.rangeData[type].range) + this.rangeData[type].min;
+					}
+				}
+			}
+		});
 
 	</script>
 
