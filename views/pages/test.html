@@ -5,6 +5,7 @@
 
 <%- contentFor('content') %>
 	<style type="text/css">
+		.recommend-size-outwrap {}
 		.recommend-size-wrap {
 			/*display: none;*/
 			position: absolute;
@@ -17,6 +18,8 @@
 			border: 1px solid grey;
 			box-sizing: border-box;
 			user-select: none;
+			z-index: 9999;
+			background: #fff;
 		}
 		.recommend-size-wrap .close-btn {
 			position: absolute;
@@ -28,13 +31,23 @@
 		    text-align: center;
 		    cursor: pointer;
 		}
+		.size-mask {
+			z-index: 999;
+		    background: #000;
+		    opacity: .5;
+		    top: 0;
+		    left: 0;
+		    position: fixed;
+		    bottom: 0;
+		    right: 0;
+		}
 		.recommend-size-wrap .size-img {
 			width: 320px;
 			height: 426px;
 		}
 		.recommend-size-wrap .size-wrap-right {
-			width: 476px;
-			padding: 0 13px;
+			width: 488px;
+			padding-left: 13px;
 			text-align: center;
 			float: right;
 		}
@@ -42,11 +55,20 @@
 			color: #222;
 			font-size: 18px;
 			font-weight: 700;
+			font-family: Arial-BoldMT;
 			text-transform: uppercase;
+		}
+		.recommend-size-wrap .size-wrap-right-s .size-wrap-title {
+			margin: 54px 0 30px 0;
 		}
 		.recommend-size-wrap .size-wrap-right .size-wrap-tips {
 			color: #666;
 			font-size: 12px;
+		}
+		.recommend-size-wrap .size-wrap-right .size-wrap-tips {
+			width: 295px;
+			margin: auto;
+			color: #222;
 		}
 		.recommend-size-wrap .size-wrap-right .size-switch {
 			width: 60px;
@@ -84,15 +106,18 @@
 			font-size: 12px;
 		}
 		.recommend-size-wrap .size-range-wrap .range-lab {
-			width: 30px;
+			width: 80px;
 			display: inline-block;
 			vertical-align: top;
+			font-weight: bold;
+			font-size: 16px;
 		}
 		.recommend-size-wrap .size-range-wrap .range-prev {
 			width: 110px;
 			display: inline-block;
 			vertical-align: top;
 			text-align: right;
+			font-weight: bold;
 		}
 		.recommend-size-wrap .size-range-wrap .range-body {
 			display: inline-block;
@@ -128,6 +153,7 @@
 			left: 100px;
 			font-size: 12px;
 			width: 30px;
+			height: 30px;
 			cursor: pointer;
 		}
 		.recommend-size-wrap .size-range-wrap .range-contain {
@@ -160,8 +186,40 @@
 			font-weight: 700;
 			color: #000;
 			text-align: center;
-			margin-left: 177px;
+			margin-left: 160px;
 			cursor: pointer;
+			font-family: Arial-BoldMT;
+		}
+		.recommend-size-wrap .size-wrap-right-s .size-submit {
+			margin: 0 auto 40px auto;
+		}
+		.recommend-size-wrap .size-wrap-right-s .size-result {
+			margin: auto;
+			padding: 55px 0 65px 0;
+			font-size: 36px;
+			font-weight: bold;
+			color: #222;
+			font-family: Arial-BoldMT;
+		}
+		.recommend-size-wrap .size-wrap-right-s .size-edit {
+			font-size: 12px;
+			color: #666;
+			width: 110px;
+			position: relative;
+			margin: auto;
+			cursor: pointer;
+		}
+		.recommend-size-wrap .size-wrap-right-s .size-edit:hover {
+			text-decoration: underline;
+		}
+		.recommend-size-wrap .size-wrap-right-s .size-edit:before {
+			content: '';
+		    display: block;
+		    width: 0;
+		    height: 0;
+		    position: absolute;
+		    border: 7px solid transparent;
+		    border-right: 6px solid #222;
 		}
 		
 	</style>
@@ -171,48 +229,70 @@
 
         <h2 style="cursor: pointer;">Touch</h2>
 
-        
 
-        <div class="recommend-size-wrap" @mouseup="rangeUp">
-        	<div class="close-btn">x</div>
-        	<img src="" alt="hahathis!" class="size-img">
-        	<div class="size-wrap-right">
-        		<div class="size-wrap-title">Get the right size</div>
-        		<p class="size-wrap-tips"> See which size people like you bought and did not return:</p>
-        		<div class="size-switch">
-        			<div></div>
-        		</div>
-        		<div class="size-range-wrap">
-        			<div class="range-item">
-        				<label class="range-prev">Height:</label>
-        				<div class="range-body">
-        					<div class="range-contain j-body-h"></div>
-        					<div class="rang-point j-point j-height" @mousemove="rangeChange($event, 'height')" @mousedown="rangeDown($event, 'height')">{{rangeData.height.value}}</div>
-        				</div>
-        				<label class="range-lab j-point">{{rangeData.height.value}}</label>
-        			</div>
-        			<div class="range-item">
-        				<label class="range-prev">Weight:</label>
-        				<div class="range-body">
-        					<div class="range-contain j-body-w"></div>
-        					<div class="rang-point j-point j-weight" @mousemove="rangeChange($event, 'weight')" @mousedown="rangeDown($event, 'weight')">{{rangeData.weight.value}}</div>
-        				</div>
-        				<label class="range-lab j-point">{{rangeData.weight.value}}</label>
-        			</div>
-        			<div class="range-item">
-        				<label class="range-prev">I prefer a fit that is:</label>
-        				<div class="range-body">
-        					<div class="range-contain j-body-p"></div>
-        					<div class="rang-point j-point j-prefer" @mousemove="rangeChange($event, 'prefer')" @mousedown="rangeDown($event, 'prefer')">{{rangeData.prefer.value}}</div>
-        				</div>
-        				<label class="range-lab j-point">{{rangeData.prefer.value}}</label>
-        			</div>
-        		</div>
-        		<div class="size-submit">
-        			Find my size
-        		</div>
-        	</div>
-        </div>
+	        <div class="size-mask"></div>
+	        <div class="recommend-size-wrap" @mouseup="rangeUp">
+	        	<div class="close-btn" @click="clickClose">x</div>
+	        	<img src="" alt="hahathis!" class="size-img">
+	        	<div class="size-wrap-right" v-if="rangeStatus == 0">
+	        		<div class="size-wrap-title">Get the right size</div>
+	        		<p class="size-wrap-tips"> See which size people like you bought and did not return:</p>
+	        		<div class="size-switch">
+	        			<div></div>
+	        		</div>
+	        		<div class="size-range-wrap">
+	        			<div class="range-item">
+	        				<label class="range-prev">Height:</label>
+	        				<div class="range-body">
+	        					<div class="range-contain j-body-h"></div>
+	        					<div class="rang-point j-point j-height" @mousemove="rangeChange($event, 'height')" @mousedown="rangeDown($event, 'height')">{{rangeData.height.value}}</div>
+	        				</div>
+	        				<label class="range-lab j-point">{{rangeData.height.value}}</label>
+	        			</div>
+	        			<div class="range-item">
+	        				<label class="range-prev">Weight:</label>
+	        				<div class="range-body">
+	        					<div class="range-contain j-body-w"></div>
+	        					<div class="rang-point j-point j-weight" @mousemove="rangeChange($event, 'weight')" @mousedown="rangeDown($event, 'weight')">{{rangeData.weight.value}}</div>
+	        				</div>
+	        				<label class="range-lab j-point">{{rangeData.weight.value}}</label>
+	        			</div>
+	        			<div class="range-item">
+	        				<label class="range-prev">I prefer a fit that is:</label>
+	        				<div class="range-body">
+	        					<div class="range-contain j-body-p"></div>
+	        					<div class="rang-point j-point j-prefer" @mousemove="rangeChange($event, 'prefer')" @mousedown="rangeDown($event, 'prefer')">{{rangeData.prefer.value}}</div>
+	        				</div>
+	        				<label class="range-lab j-point">{{rangeData.prefer.value}}</label>
+	        			</div>
+	        		</div>
+	        		<div class="size-submit" @click="clickFindSize">
+	        			Find my size
+	        		</div>
+	        	</div>
+	        	<div class="size-wrap-right size-wrap-right-s" v-else>
+	        		<div class="size-wrap-title" v-if="resultSize">
+	        			I also wear...
+	        		</div>
+	        		<div class="size-wrap-title" v-else>
+	        			OOPS!
+	        		</div>
+	        		<p class="size-wrap-tips" v-if="resultSize">
+	        			Depending on your height, weight, and fit preferences, to recommend the following sizes
+	        		</p>
+	        		<p class="size-wrap-tips" v-else>
+	        			This dress is not available in a size that matches your proportions and fit preference.
+	        		</p>
+	        		<div class="size-result" v-cloak>
+	        			{{resultSize}}
+	        		</div>
+	        		<div class="size-submit">
+	        			Continue shopping
+	        		</div>
+	        		<div class="size-edit">Edit my info</div>
+	        	</div>
+
+	    </div>
 
         <div class="endWrap">end!</div>
 	</div>
@@ -227,11 +307,12 @@
 			$('.recommend-size-wrap').show();
 		})
 
-		$('.j-range-w').siblings('.rang-point').css('left', '56px');
+		// $('.j-range-w').siblings('.rang-point').css('left', '56px');
 
 		var romSize = new Vue({
 			el: '.recommend-size-wrap',
 			data: {
+				rangeStatus: 0,
 				rangeData: {
 					height: {
 						ox: $('.j-body-h').offset().left,
@@ -264,13 +345,20 @@
 						max: 2
 					},
 				},
-				currentType: null
+				currentType: null,
+				resultSize: 'XXL'
 			},
 			created: function() {
 				console.log('vue!')
 
 			},
 			methods: {
+				clickFindSize: function() {
+					this.rangeStatus = 1;
+				},
+				clickClose: function() {
+					$('.recommend-size-wrap').hide();
+				},
 				rangeChange: function(el, type) {
 					if(this.rangeData[type].status) {
 						var _el = $(el.target);
@@ -278,7 +366,6 @@
 	                	this.rangeData[type].left = _length*1 + 15;
 	                	if(_length > -18 && _length <=188) {
 	                		_el.offset({left: el.pageX-this.rangeData[type].dx});
-	                		// console.log(_el.css('left'))
 	                		this.valueSwitch(type, parseInt(_el.css('left')));
 	                	}
 	                }
@@ -288,7 +375,6 @@
 					this.rangeData[type].dx = el.pageX-_el.offset().left;
 					this.rangeData[type].status = 1;
 					this.currentType = type;
-					// console.log(this.rangeData[type].dx)
 				},
 				rangeUp: function() {
 					this.rangeData.height.status = 0;
