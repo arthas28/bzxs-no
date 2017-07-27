@@ -64,8 +64,9 @@
 		.recommend-size-wrap .size-wrap-right .size-wrap-tips {
 			color: #666;
 			font-size: 12px;
+			margin: 13px auto;
 		}
-		.recommend-size-wrap .size-wrap-right .size-wrap-tips {
+		.recommend-size-wrap .size-wrap-right-s .size-wrap-tips {
 			width: 295px;
 			margin: auto;
 			color: #222;
@@ -89,6 +90,9 @@
 			background-color: #000;
 			left: 0;
 		}
+		.recommend-size-wrap .size-wrap-right .size-switch-inch div{
+			float: right;
+		}
 		.recommend-size-wrap .size-wrap-right .size-switch:before {
 			content: 'CM';
 			top: 6px;
@@ -111,6 +115,7 @@
 			vertical-align: top;
 			font-weight: bold;
 			font-size: 16px;
+			text-align: left;
 		}
 		.recommend-size-wrap .size-range-wrap .range-prev {
 			width: 110px;
@@ -124,6 +129,16 @@
 			/*width: 230px;*/
 			margin: 0 30px;
 			position: relative;
+		}
+		.recommend-size-wrap .size-range-wrap .range-body .range-input {
+			position: absolute;
+		    left: 13px;
+		    top: -20px;
+		    width: 200px;
+		    height: 41px;
+		    z-index: 200;
+		    cursor: pointer;
+		    opacity: 0;
 		}
 		.recommend-size-wrap .size-range-wrap .range-body:before {
 			content: '';
@@ -150,9 +165,9 @@
 		.recommend-size-wrap .size-range-wrap .rang-point {
 			position: absolute;
 			top: 12px;
-			left: 100px;
+			/*left: 100px;*/
 			font-size: 12px;
-			width: 30px;
+			width: 60px;
 			height: 30px;
 			cursor: pointer;
 		}
@@ -231,39 +246,42 @@
 
 
 	        <div class="size-mask"></div>
-	        <div class="recommend-size-wrap" @mouseup="rangeUp">
+	        <div class="recommend-size-wrap">
 	        	<div class="close-btn" @click="clickClose">x</div>
 	        	<img src="" alt="hahathis!" class="size-img">
 	        	<div class="size-wrap-right" v-if="rangeStatus == 0">
 	        		<div class="size-wrap-title">Get the right size</div>
 	        		<p class="size-wrap-tips"> See which size people like you bought and did not return:</p>
-	        		<div class="size-switch">
+	        		<div class="size-switch" :class="{'size-switch-inch': unit == 'INCH'}" @click="clickUnit">
 	        			<div></div>
 	        		</div>
 	        		<div class="size-range-wrap">
 	        			<div class="range-item">
 	        				<label class="range-prev">Height:</label>
 	        				<div class="range-body">
+	        					<input type="range" :min="rangeData.height[unit].min" :max="rangeData.height[unit].max" :step="rangeStep[unit]" class="j-input-h range-input" v-model="rangeData['height'][unit].value">
 	        					<div class="range-contain j-body-h"></div>
-	        					<div class="rang-point j-point j-height" @mousemove="rangeChange($event, 'height')" @mousedown="rangeDown($event, 'height')">{{rangeData.height.value}}</div>
+	        					<div class="rang-point j-point j-height">{{rangeData['height'][unit].value|inchcase(unit)}}</div>
 	        				</div>
-	        				<label class="range-lab j-point">{{rangeData.height.value}}</label>
+	        				<label class="range-lab j-point">{{rangeData['height'][unit].value|inchcase(unit)}}</label>
 	        			</div>
 	        			<div class="range-item">
 	        				<label class="range-prev">Weight:</label>
 	        				<div class="range-body">
+	        					<input type="range" :min="rangeData.weight[unit].min" :max="rangeData.weight[unit].max" step="1" class="j-input-w range-input" v-model="rangeData['weight'][unit].value">
 	        					<div class="range-contain j-body-w"></div>
-	        					<div class="rang-point j-point j-weight" @mousemove="rangeChange($event, 'weight')" @mousedown="rangeDown($event, 'weight')">{{rangeData.weight.value}}</div>
+	        					<div class="rang-point j-point j-weight">{{rangeData['weight'][unit].value|inchcase(unit, 'KG')}}</div>
 	        				</div>
-	        				<label class="range-lab j-point">{{rangeData.weight.value}}</label>
+	        				<label class="range-lab j-point">{{rangeData['weight'][unit].value|inchcase(unit, 'KG')}}</label>
 	        			</div>
 	        			<div class="range-item">
 	        				<label class="range-prev">I prefer a fit that is:</label>
 	        				<div class="range-body">
+	        					<input type="range" :min="rangeData.prefer.min" :max="rangeData.prefer.max" class="j-input-p range-input" v-model="rangeData.prefer.value">
 	        					<div class="range-contain j-body-p"></div>
-	        					<div class="rang-point j-point j-prefer" @mousemove="rangeChange($event, 'prefer')" @mousedown="rangeDown($event, 'prefer')">{{rangeData.prefer.value}}</div>
+	        					<div class="rang-point j-point j-prefer">{{rangeData.prefer.value|inchcase('prefer')}}</div>
 	        				</div>
-	        				<label class="range-lab j-point">{{rangeData.prefer.value}}</label>
+	        				<label class="range-lab j-point">{{rangeData.prefer.value|inchcase('prefer')}}</label>
 	        			</div>
 	        		</div>
 	        		<div class="size-submit" @click="clickFindSize">
@@ -309,108 +327,174 @@
 
 		// $('.j-range-w').siblings('.rang-point').css('left', '56px');
 
+		// 厘米转英尺过滤器
+		Vue.filter('inchcase', function(value, unit, type) {
+		    if (value<0) { return ''}
+
+		    if(unit == 'prefer') {
+		      	var _prefer = 'Suitable';
+		      	if(parseInt(value) < 67) {
+		      		_prefer = 'Tighter';
+		      	} else if(parseInt(value) > 135) {
+		      		_prefer = 'Looser';
+		      	}
+		      	return _prefer;
+		    } else {
+		    	if(type == 'KG') {
+		    		if(unit == 'CM') {
+		    			return value + ' KG'
+		    		} else {
+		    			return value + ' LB'
+		    		}
+		    	} else {
+ 		      		return value + ' ' + unit
+ 		      	}
+ 		    }
+		});
+
 		var romSize = new Vue({
 			el: '.recommend-size-wrap',
 			data: {
+				unit: 'CM',
+				rangeStep: {
+					'CM': 1,
+					'INCH': 0.1
+				},
 				rangeStatus: 0,
 				rangeData: {
 					height: {
-						ox: $('.j-body-h').offset().left,
-						dx: 0,
-						status: 0,
-						value: 170,
-						left: 0,
-						range: 58,
-						min: 140,
-						max: 198
+						CM: {
+							value: 0,
+							range: 58,
+							min: 140,
+							max: 198
+						},
+						INCH: {
+							value: 0,
+							range: 22.9,
+							min: 55.1,
+							max: 78.0
+						}
 					},
 					weight: {
-						ox: $('.j-body-w').offset().left,
-						dx: 0,
-						status: 0,
-						value: 60,
-						left: 0,
-						range: 125,
-						min: 25,
-						max: 150
+						CM: {
+							value: 0,
+							range: 125,
+							min: 25,
+							max: 150
+						},
+						INCH: {
+							value: 0,
+							range: 276,
+							min: 55,
+							max: 331
+						}
 					},
 					prefer: {
-						ox: $('.j-body-p').offset().left,
-						dx: 0,
-						status: 0,
-						value: 'Suitable',
-						left: 0,
-						range: 2,
+						value: 0,
+						range: 200,
 						min: 0,
-						max: 2
+						max: 200
 					},
 				},
 				currentType: null,
-				resultSize: 'XXL'
+				resultSize: 'XXL',
+				rangeError: 15
+			},
+			watch: {
+				'rangeData.height.CM.value': function(val) {
+					$(".j-height").css('left', Math.round((val - this.rangeData.height.CM.min)/this.rangeData.height.CM.range*200)-this.rangeError);
+					this.rangeData.height.INCH.value = (parseFloat(val)/2.539999918).toFixed(1)
+				},
+				'rangeData.height.INCH.value': function(val) {
+					$(".j-height").css('left', Math.round((val - this.rangeData.height.INCH.min)/this.rangeData.height.INCH.range*200)-this.rangeError);
+					this.rangeData.height.CM.value = Math.round(val*2.539999918)
+				},
+				'rangeData.weight.CM.value': function(val) {
+					$(".j-weight").css('left', Math.round((val - this.rangeData.weight.CM.min)/this.rangeData.weight.CM.range*200)-this.rangeError);
+					this.rangeData.weight.INCH.value = Math.round(val/0.4535924)
+				},
+				'rangeData.weight.INCH.value': function(val) {
+					$(".j-weight").css('left', Math.round((val - this.rangeData.weight.INCH.min)/this.rangeData.weight.INCH.range*200)-this.rangeError);
+					this.rangeData.weight.CM.value = Math.round(val*0.4535924)
+				},
+				'rangeData.prefer.value': function(val) {
+					$(".j-prefer").css('left', Math.round((val - this.rangeData.prefer.min)/this.rangeData.prefer.range*200)-this.rangeError);
+				}
 			},
 			created: function() {
 				console.log('vue!')
+				this.rangeData.height.CM.value = 170;
+				this.rangeData.weight.CM.value = 60;
+				this.rangeData.prefer.value = 100;
 
 			},
 			methods: {
 				clickFindSize: function() {
 					this.rangeStatus = 1;
 				},
+				clickUnit: function() {
+					if(this.unit == 'CM') {
+						this.unit = 'INCH';
+					} else {
+						this.unit = 'CM';
+					}
+				},
 				clickClose: function() {
 					$('.recommend-size-wrap').hide();
 				},
-				rangeChange: function(el, type) {
-					if(this.rangeData[type].status) {
-						var _el = $(el.target);
-	                	var _length = _el.offset().left-this.rangeData[type].ox;
-	                	this.rangeData[type].left = _length*1 + 15;
-	                	if(_length > -18 && _length <=188) {
-	                		_el.offset({left: el.pageX-this.rangeData[type].dx});
-	                		this.valueSwitch(type, parseInt(_el.css('left')));
-	                	}
-	                }
-				},
-				rangeDown: function(el, type) {
-					var _el = $(el.target);
-					this.rangeData[type].dx = el.pageX-_el.offset().left;
-					this.rangeData[type].status = 1;
-					this.currentType = type;
-				},
-				rangeUp: function() {
-					this.rangeData.height.status = 0;
-					this.rangeData.weight.status = 0;
-					this.rangeData.prefer.status = 0;
+				// rangeChange: function(el, type) {
+				// 	if(this.rangeData[type].status) {
+				// 		var _el = $(el.target);
+	   //              	var _length = _el.offset().left-this.rangeData[type].ox;
+	   //              	this.rangeData[type].left = _length*1 + 15;
+	   //              	if(_length > -18 && _length <=188) {
+	   //              		_el.offset({left: el.pageX-this.rangeData[type].dx});
+	   //              		this.valueSwitch(type, parseInt(_el.css('left')));
+	   //              	}
+	   //              }
+				// },
+				// rangeDown: function(el, type) {
+				// 	var _el = $(el.target);
+				// 	this.rangeData[type].dx = el.pageX-_el.offset().left;
+				// 	this.rangeData[type].status = 1;
+				// 	this.currentType = type;
+				// },
+				// rangeUp: function() {
+				// 	this.rangeData.height.status = 0;
+				// 	this.rangeData.weight.status = 0;
+				// 	this.rangeData.prefer.status = 0;
 
-					if(this.currentType == 'prefer') {
-						if(this.rangeData.prefer.value == 'Tighter') {
-							$(".j-prefer").css('left', 0);
-						} else if(this.rangeData.prefer.value == 'Looser') {
-							$(".j-prefer").css('left', 200);
-						} else {
-							$(".j-prefer").css('left', 100);
-						}
-					} else if(this.currentType) {
-						if(this.rangeData[this.currentType].left < 0) {
-							$(".j-" + this.currentType).css('left', 0);
-						} else if(this.rangeData[this.currentType].left > 200) {
-							$(".j-" + this.currentType).css('left', 200);
-						}
-					}
-				},
-				valueSwitch: function(type, value) {
-					if(type == 'prefer') {
-						if(value < 67) {
-							this.rangeData[type].value = 'Tighter';
-						} else if(value > 135) {
-							this.rangeData[type].value = 'Looser';
-						} else {
-							this.rangeData[type].value = 'Suitable';
-						}
-					} else {
-						Math.round((this.value-this.min)/(this.max-this.min)*200)
-						this.rangeData[type].value = Math.round(value/200*this.rangeData[type].range) + this.rangeData[type].min;
-					}
-				}
+				// 	if(this.currentType == 'prefer') {
+				// 		if(this.rangeData.prefer.value == 'Tighter') {
+				// 			$(".j-prefer").css('left', 0);
+				// 		} else if(this.rangeData.prefer.value == 'Looser') {
+				// 			$(".j-prefer").css('left', 200);
+				// 		} else {
+				// 			$(".j-prefer").css('left', 100);
+				// 		}
+				// 	} else if(this.currentType) {
+				// 		if(this.rangeData[this.currentType].left < 0) {
+				// 			$(".j-" + this.currentType).css('left', 0);
+				// 		} else if(this.rangeData[this.currentType].left > 200) {
+				// 			$(".j-" + this.currentType).css('left', 200);
+				// 		}
+				// 	}
+				// },
+				// valueSwitch: function(type, value) {
+				// 	if(type == 'prefer') {
+				// 		if(value < 67) {
+				// 			this.rangeData[type].value = 'Tighter';
+				// 		} else if(value > 135) {
+				// 			this.rangeData[type].value = 'Looser';
+				// 		} else {
+				// 			this.rangeData[type].value = 'Suitable';
+				// 		}
+				// 	} else {
+				// 		Math.round((this.value-this.min)/(this.max-this.min)*200)
+				// 		this.rangeData[type].value = Math.round(value/200*this.rangeData[type].range) + this.rangeData[type].min;
+				// 	}
+				// }
 			}
 		});
 
