@@ -5,7 +5,6 @@
 
 <%- contentFor('content') %>
 	<style type="text/css">
-		.recommend-size-outwrap {}
 		.recommend-size-wrap {
 			/*display: none;*/
 			position: absolute;
@@ -71,6 +70,9 @@
 			margin: auto;
 			color: #222;
 		}
+		.recommend-size-wrap .size-wrap-right-s .size-wrap-tips-s {
+			margin-top: 58px;
+		}
 		.recommend-size-wrap .size-wrap-right .size-switch {
 			width: 60px;
 			height: 28px;
@@ -81,6 +83,9 @@
 			box-sizing: border-box;
 			cursor: pointer;
 			position: relative;
+		}
+		.recommend-size-wrap .size-wrap-right .size-switch:hover {
+			border: 1px solid #222;
 		}
 		.recommend-size-wrap .size-wrap-right .size-switch div {
 			width: 24px;
@@ -98,19 +103,29 @@
 			top: 6px;
 			left: -38px;
 			position: absolute;
+			font-weight: bold;
 		}
 		.recommend-size-wrap .size-wrap-right .size-switch:after {
 			content: 'IN';
 			top: 6px;
 			right: -30px;
 			position: absolute;
+			color: #666;
+		}
+		.recommend-size-wrap .size-wrap-right .size-switch-inch:before {
+			color: #666;
+			font-weight: normal;
+		}
+		.recommend-size-wrap .size-wrap-right .size-switch-inch:after {
+			color: #222;
+			font-weight: bold;
 		}
 		.recommend-size-wrap .size-range-wrap .range-item {
 			margin-bottom: 60px;
 			font-size: 12px;
 		}
 		.recommend-size-wrap .size-range-wrap .range-lab {
-			width: 80px;
+			width: 85px;
 			display: inline-block;
 			vertical-align: top;
 			font-weight: bold;
@@ -118,7 +133,7 @@
 			text-align: left;
 		}
 		.recommend-size-wrap .size-range-wrap .range-prev {
-			width: 110px;
+			width: 85px;  
 			display: inline-block;
 			vertical-align: top;
 			text-align: right;
@@ -126,7 +141,6 @@
 		}
 		.recommend-size-wrap .size-range-wrap .range-body {
 			display: inline-block;
-			/*width: 230px;*/
 			margin: 0 30px;
 			position: relative;
 		}
@@ -149,7 +163,7 @@
 		    left: -13px;
 		    top: -2px;
 		    border: 4px solid transparent;
-		    border-right: 6px solid #666;
+		    border-right: 6px solid #ccc;
 		}
 		.recommend-size-wrap .size-range-wrap .range-body:after {
 		    content: '';
@@ -160,23 +174,43 @@
 		    right: -13px;
 		    top: -2px;
 		    border: 4px solid transparent;
-		    border-left: 6px solid #666;
+		    border-left: 6px solid #ccc;
+		}
+		.recommend-size-wrap .size-range-wrap .range-body-no:before {
+			opacity: 0;
+		}
+		.recommend-size-wrap .size-range-wrap .range-body-no:after {
+			opacity: 0;
+		}
+		.recommend-size-wrap .size-range-wrap .range-item:hover .range-body:after {
+			border-left: 6px solid #222;
 		}
 		.recommend-size-wrap .size-range-wrap .rang-point {
 			position: absolute;
 			top: 12px;
-			/*left: 100px;*/
 			font-size: 12px;
-			width: 60px;
+			width: 70px;
 			height: 30px;
 			cursor: pointer;
+		}
+		.recommend-size-wrap .size-range-wrap .range-lab span {
+			font-size: 12px;
+			font-weight: normal;
+		}
+		.recommend-size-wrap .size-range-wrap .range-lab input {
+			width: 15px;
+			border: 0;
+			outline: 0;
+			text-align: center;
+		}
+		.recommend-size-wrap .size-range-wrap .range-lab .single {
+			width: 30px;
 		}
 		.recommend-size-wrap .size-range-wrap .range-contain {
 			position: relative;
 			height: 3px;
 			width: 200px;
 			margin: 0 15px;
-			/*z-index: 999;*/
 			background: #666;
 		}
 		.recommend-size-wrap .size-range-wrap .rang-point:before {
@@ -189,7 +223,7 @@
 		    left: 50%;
     		margin-left: -4px;
 		    border: 4px solid transparent;
-		    border-top: 6px solid #666;
+		    border-top: 6px solid #222;
 		}
 		.recommend-size-wrap .size-submit {
 			width: 200px;
@@ -201,7 +235,7 @@
 			font-weight: 700;
 			color: #000;
 			text-align: center;
-			margin-left: 160px;
+			margin: 0 auto;
 			cursor: pointer;
 			font-family: Arial-BoldMT;
 		}
@@ -219,7 +253,7 @@
 		.recommend-size-wrap .size-wrap-right-s .size-edit {
 			font-size: 12px;
 			color: #666;
-			width: 110px;
+			width: 120px;
 			position: relative;
 			margin: auto;
 			cursor: pointer;
@@ -250,8 +284,10 @@
 	        	<div class="close-btn" @click="clickClose">x</div>
 	        	<img src="" alt="hahathis!" class="size-img">
 	        	<div class="size-wrap-right" v-if="rangeStatus == 0">
-	        		<div class="size-wrap-title">Get the right size</div>
-	        		<p class="size-wrap-tips"> See which size people like you bought and did not return:</p>
+	        		<div class="size-wrap-title">choose my size</div>
+	        		<p class="size-wrap-tips">
+	        			according to the information you enter, a size will be recommended with other customers' feedback on the size, which you can use for your reference.
+	        		</p>
 	        		<div class="size-switch" :class="{'size-switch-inch': unit == 'INCH'}" @click="clickUnit">
 	        			<div></div>
 	        		</div>
@@ -261,27 +297,27 @@
 	        				<div class="range-body">
 	        					<input type="range" :min="rangeData.height[unit].min" :max="rangeData.height[unit].max" :step="rangeStep[unit]" class="j-input-h range-input" v-model="rangeData['height'][unit].value">
 	        					<div class="range-contain j-body-h"></div>
-	        					<div class="rang-point j-point j-height">{{rangeData['height'][unit].value|inchcase(unit)}}</div>
+	        					<div class="rang-point j-point j-height" v-html="unitFiter(rangeData['height'][unit].value, unit)"></div>
 	        				</div>
-	        				<label class="range-lab j-point">{{rangeData['height'][unit].value|inchcase(unit)}}</label>
+	        				<label class="range-lab j-point" v-html="unitFiter(rangeData['height'][unit].value, unit, null, 'edit')"></label>
 	        			</div>
 	        			<div class="range-item">
 	        				<label class="range-prev">Weight:</label>
 	        				<div class="range-body">
 	        					<input type="range" :min="rangeData.weight[unit].min" :max="rangeData.weight[unit].max" step="1" class="j-input-w range-input" v-model="rangeData['weight'][unit].value">
 	        					<div class="range-contain j-body-w"></div>
-	        					<div class="rang-point j-point j-weight">{{rangeData['weight'][unit].value|inchcase(unit, 'KG')}}</div>
+	        					<div class="rang-point j-point j-weight" v-html="unitFiter(rangeData['weight'][unit].value, unit, 'KG')"></div>
 	        				</div>
-	        				<label class="range-lab j-point">{{rangeData['weight'][unit].value|inchcase(unit, 'KG')}}</label>
+	        				<label class="range-lab j-point" v-html="unitFiter(rangeData['weight'][unit].value, unit, 'KG', 'edit')"></label>
 	        			</div>
 	        			<div class="range-item">
-	        				<label class="range-prev">I prefer a fit that is:</label>
-	        				<div class="range-body">
+	        				<label class="range-prev">Preference:</label>
+	        				<div class="range-body range-body-no">
 	        					<input type="range" :min="rangeData.prefer.min" :max="rangeData.prefer.max" class="j-input-p range-input" v-model="rangeData.prefer.value">
 	        					<div class="range-contain j-body-p"></div>
-	        					<div class="rang-point j-point j-prefer">{{rangeData.prefer.value|inchcase('prefer')}}</div>
+	        					<div class="rang-point j-point j-prefer" v-html="unitFiter(rangeData.prefer.value, 'prefer')"></div>
 	        				</div>
-	        				<label class="range-lab j-point">{{rangeData.prefer.value|inchcase('prefer')}}</label>
+	        				<label class="range-lab j-point" v-html="unitFiter(rangeData.prefer.value, 'prefer')"></label>
 	        			</div>
 	        		</div>
 	        		<div class="size-submit" @click="clickFindSize">
@@ -289,17 +325,14 @@
 	        		</div>
 	        	</div>
 	        	<div class="size-wrap-right size-wrap-right-s" v-else>
-	        		<div class="size-wrap-title" v-if="resultSize">
-	        			I also wear...
+	        		<div class="size-wrap-title" v-if="!resultSize">
+	        			Sorry!
 	        		</div>
-	        		<div class="size-wrap-title" v-else>
-	        			OOPS!
-	        		</div>
-	        		<p class="size-wrap-tips" v-if="resultSize">
-	        			Depending on your height, weight, and fit preferences, to recommend the following sizes
+	        		<p class="size-wrap-tips size-wrap-tips-s" v-if="resultSize">
+	        			Most customers who have similar shapes chose
 	        		</p>
 	        		<p class="size-wrap-tips" v-else>
-	        			This dress is not available in a size that matches your proportions and fit preference.
+	        			No size can be recommended. Please try again.
 	        		</p>
 	        		<div class="size-result" v-cloak>
 	        			{{resultSize}}
@@ -332,11 +365,11 @@
 		    if (value<0) { return ''}
 
 		    if(unit == 'prefer') {
-		      	var _prefer = 'Suitable';
+		      	var _prefer = 'Average';
 		      	if(parseInt(value) < 67) {
-		      		_prefer = 'Tighter';
+		      		_prefer = 'Thin';
 		      	} else if(parseInt(value) > 135) {
-		      		_prefer = 'Looser';
+		      		_prefer = 'Thick';
 		      	}
 		      	return _prefer;
 		    } else {
@@ -399,7 +432,9 @@
 				},
 				currentType: null,
 				resultSize: 'XXL',
-				rangeError: 15
+				rangeError: 20,
+				rangeHeightStatus: 0,
+				rangeWeightStatus: 0
 			},
 			watch: {
 				'rangeData.height.CM.value': function(val) {
@@ -431,7 +466,51 @@
 			},
 			methods: {
 				clickFindSize: function() {
-					this.rangeStatus = 1;
+					this.rangeHeightStatus = 1;
+					this.rangeWeightStatus = 1;
+					if(this.unit == 'CM') {
+						var _height = parseInt($('.j-single-h').val());
+						var _weight = parseInt($('.j-single-w').val());
+					} else {
+						var _height = parseInt($('.j-dou-h-1').val())*12 + parseInt($('.j-dou-h-2').val());
+						var _weight = parseInt($('.j-dou-w-1').val())*14 + parseInt($('.j-dou-w-2').val());
+					}
+
+					console.log(_height)
+					console.log(_weight)
+
+					this.rangeData.height[this.unit].value = _height;
+					this.rangeData.weight[this.unit].value = _weight;
+					if(_height > this.rangeData.height[this.unit].max) {
+						this.rangeData.height[this.unit].value = this.rangeData.height[this.unit].max;
+						this.rangeHeightStatus = 0;
+					} else if (_height < this.rangeData.height[this.unit].min) {
+						this.rangeData.height[this.unit].value = this.rangeData.height[this.unit].min;
+						this.rangeHeightStatus = 0;
+					} else {
+						this.rangeData.height[this.unit].value = _height;
+					}
+
+					if(_weight > this.rangeData.weight[this.unit].max) {
+						this.rangeData.weight[this.unit].value = this.rangeData.weight[this.unit].max;
+						this.rangeWeightStatus = 0;
+					} else if (_weight < this.rangeData.weight.CM.min) {
+						this.rangeData.weight[this.unit].value = this.rangeData.weight[this.unit].min;
+						this.rangeWeightStatus = 0;
+					} else {
+						this.rangeData.weight[this.unit].value = _weight;
+					}
+
+					if(this.unit != 'CM') {
+						console.log(Math.round(_height*2.539999918))
+						console.log(Math.round(_weight*0.4535924))
+					}
+
+					// if(this.rangeWeightStatus && this.rangeHeightStatus) {
+					// 	console.log('OK!')
+					// 	this.rangeStatus = 1;
+					// }
+
 				},
 				clickUnit: function() {
 					if(this.unit == 'CM') {
@@ -443,6 +522,49 @@
 				clickClose: function() {
 					$('.recommend-size-wrap').hide();
 				},
+				unitFiter: function(value, unit, type, tag) {
+				    if (value<0) { return ''}
+
+				    if(unit == 'prefer') {
+				      	var _prefer = 'Average';
+				      	if(parseInt(value) < 67) {
+				      		_prefer = 'Thin';
+				      	} else if(parseInt(value) > 135) {
+				      		_prefer = 'Thick';
+				      	}
+				      	return _prefer;
+				    } else {
+				    	if(tag == 'edit') {
+				    		if(type == 'KG') {
+					    		if(unit == 'CM') {
+					    			return '<input class="single j-single-w" value="' + value + '"> <span>KG<span>'
+					    		} else {
+					    			return '<input class="j-dou-w-1" value="' + parseInt(value/14) + '"> <span>ST</span> <input class="j-dou-w-2" value="' + parseInt(value%14) + '"> <span>LB</span>'
+					    		}
+					    	} else {
+					    		if(unit == 'CM') {
+			 		      			return '<input autofocus class="single j-single-h" value="' + value + '"> <span>CM</span>'
+			 		      		} else {
+			 		      			return '<input class="j-dou-h-1" value="' + parseInt(value/12) + '"> <span>FT</span> <input class="j-dou-h-2" value="' + parseInt(value%12) + '"> <span>IN</span>'
+			 		      		}
+			 		      	}
+				    	} else {
+					    	if(type == 'KG') {
+					    		if(unit == 'CM') {
+					    			return value + ' <span>KG<span>'
+					    		} else {
+					    			return parseInt(value/14) + ' <span>ST</span> ' + parseInt(value%14) + ' <span>LB</span>'
+					    		}
+					    	} else {
+					    		if(unit == 'CM') {
+			 		      			return value + ' <span>CM</span>'
+			 		      		} else {
+			 		      			return parseInt(value/12) + ' <span>FT</span> ' + parseInt(value%12) + ' <span>IN</span>'
+			 		      		}
+			 		      	}
+			 		    }
+		 		    }
+				}
 				// rangeChange: function(el, type) {
 				// 	if(this.rangeData[type].status) {
 				// 		var _el = $(el.target);
