@@ -144,6 +144,17 @@
 			margin: 0 30px;
 			position: relative;
 		}
+		.recommend-size-wrap .size-range-wrap .range-body .range-text {
+			position: absolute;
+		    width: 100%;
+		    top: 13px;
+		}
+		.recommend-size-wrap .size-range-wrap .range-body .range-text .text-left {
+			float: left;
+		}
+		.recommend-size-wrap .size-range-wrap .range-body .range-text .text-right {
+			float: right;
+		}
 		.recommend-size-wrap .size-range-wrap .range-body .range-input {
 			position: absolute;
 		    left: 13px;
@@ -315,7 +326,12 @@
 	        				<div class="range-body range-body-no">
 	        					<input type="range" :min="rangeData.prefer.min" :max="rangeData.prefer.max" class="j-input-p range-input" v-model="rangeData.prefer.value">
 	        					<div class="range-contain j-body-p"></div>
-	        					<div class="rang-point j-point j-prefer" v-html="unitFiter(rangeData.prefer.value, 'prefer')"></div>
+	        					<div class="rang-point j-point j-prefer"></div>
+	        					<div class="range-text">
+	        						<span class="text-left">Thin</span>
+	        						<span>Average</span>
+	        						<span class="text-right">Thick</span>
+	        					</div>
 	        				</div>
 	        				<label class="range-lab j-point" v-html="unitFiter(rangeData.prefer.value, 'prefer')"></label>
 	        			</div>
